@@ -1,5 +1,5 @@
 # Mantener carpeta vacía
-*
+#*
 !.gitignore
 
-/model-latest.pkl
+#/model-latest.pkl
