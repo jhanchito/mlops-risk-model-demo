@@ -49,7 +49,7 @@ python -m pytest -q
 python -m src.data_prep
 python -m src.train
 python -m src.evaluate
-#GEnera la data de proudccioón
+#GEnera la data de proudccioón SYNTETICA PARA SIMULAR EL CONTINUOS TRAINING POsteriormente
 python -m src.simulate_production_data
 #Esto genera métricas baseline
 
