@@ -3,7 +3,7 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
-from sklearn.metrics import roc_auc_score, f1_score
+from sklearn.metrics import roc_auc_score, f1_score, recall_score,balanced_accuracy_score
 
 from .config import PROCESSED_DATA_DIR, LATEST_MODEL_PATH, TARGET_COLUMN
 from .model_utils import split_features_target
@@ -35,10 +35,14 @@ def main() -> None:
 
     auc = roc_auc_score(y_valid, y_proba)
     f1 = f1_score(y_valid, y_pred)
+    recall =  recall_score(y_valid, y_pred)
+    balanced = balanced_accuracy_score(y_valid, y_pred)
 
     print("===== MÉTRICAS DE EVALUACIÓN =====")
     print(f"AUC valid: {auc:.4f}")
     print(f"F1  valid: {f1:.4f}")
+    print(f"Recall valid: {recall:.4f}")
+    print(f"Balanced Accuracy valid: {balanced:.4f}")
 
 
 if __name__ == "__main__":
