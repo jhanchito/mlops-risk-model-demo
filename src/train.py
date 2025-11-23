@@ -3,7 +3,7 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
-from sklearn.metrics import roc_auc_score, f1_score
+from sklearn.metrics import roc_auc_score, f1_score , accuracy_score, recall_score , balanced_accuracy_score
 
 import mlflow
 import mlflow.sklearn
@@ -67,15 +67,24 @@ def main() -> None:
 
         auc = roc_auc_score(y_valid, y_proba)
         f1 = f1_score(y_valid, y_pred)
+        accuracy = accuracy_score(y_valid, y_pred)
+        recall =  recall_score(y_valid, y_pred)
+        balanced = balanced_accuracy_score(y_valid, y_pred)
 
         print(f"AUC valid: {auc:.4f}")
         print(f"F1  valid: {f1:.4f}")
+        print(f"Accuracy valid: {accuracy:.4f}")
+        print(f"Recall valid: {recall:.4f}")
+        print(f"Balanced Accuracy valid: {balanced:.4f}")
 
         # --- Guardar métricas baseline para detectar model drift ---
         METRICS_DIR.mkdir(parents=True, exist_ok=True)
         baseline_metrics = {
             "auc_valid": float(auc),
             "f1_valid": float(f1),
+            "accuracy_valid": float(accuracy),
+            "recall_valid": float(recall),
+            "balanced_accuracy_valid": float(balanced),
         }
         with open(BASELINE_METRICS_PATH, "w", encoding="utf-8") as f:
             json.dump(baseline_metrics, f, indent=2)
@@ -86,6 +95,9 @@ def main() -> None:
             {
                 "auc_valid": auc,
                 "f1_valid": f1,
+                "accuracy_valid": accuracy,
+                "recall_valid": recall,
+                "balanced_accuracy_valid": balanced,
             }
         )
 

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc_score, f1_score
+from sklearn.metrics import roc_auc_score, f1_score , accuracy_score , recall_score , balanced_accuracy_score
 
 from .config import (
     PROCESSED_DATA_DIR,
@@ -97,25 +97,44 @@ def compute_model_drift(prod_df: pd.DataFrame, baseline_metrics: dict) -> bool:
 
     auc_prod = roc_auc_score(y_prod, y_proba)
     f1_prod = f1_score(y_prod, y_pred)
+    accuracy_prod = accuracy_score(y_prod, y_pred)
+    recall_prod =  recall_score(y_prod, y_pred)
+    balanced_prod = balanced_accuracy_score(y_prod, y_pred)
 
     print("=== MODEL DRIFT CHECK ===")
     print(f"Baseline AUC: {baseline_metrics['auc_valid']:.4f}")
     print(f"Prod AUC    : {auc_prod:.4f}")
     print(f"Baseline F1 : {baseline_metrics['f1_valid']:.4f}")
     print(f"Prod F1     : {f1_prod:.4f}")
+    print(f"Baseline Accuracy : {baseline_metrics['accuracy_valid']:.4f}")
+    print(f"Prod Accuracy     : {accuracy_prod:.4f}")
+    print(f"Baseline recall : {baseline_metrics['recall_valid']:.4f}")
+    print(f"Prod recall     : {recall_prod:.4f}")
+    print(f"Baseline balanced accuracy : {baseline_metrics['balanced_accuracy_valid']:.4f}")
+    print(f"Prod balanced accuracy     : {balanced_prod:.4f}")
+
 
     # Umbral: caída de 0.05 en AUC o F1
     auc_drop = baseline_metrics["auc_valid"] - auc_prod
     f1_drop = baseline_metrics["f1_valid"] - f1_prod
+    accuracy_drop = baseline_metrics["accuracy_valid"] - accuracy_prod
+    recall_drop = baseline_metrics["recall_valid"] - recall_prod
+    balanced_acc_drop = baseline_metrics["balanced_accuracy_valid"] - balanced_prod
 
     print(f"AUC drop: {auc_drop:.4f}")
     print(f"F1  drop: {f1_drop:.4f}")
+    print(f"Accuracy drop: {accuracy_drop:.4f}")
+    print(f"Recall drop: {recall_drop:.4f}")
+    print(f"Balanced Accuracy drop: {balanced_acc_drop:.4f}")
 
     drift_auc = auc_drop > 0.05
     drift_f1 = f1_drop > 0.05
+    drift_accuracy = accuracy_drop > 0.05
+    drift_recall = recall_drop > 0.05
+    drift_balanced_acc = balanced_acc_drop > 0.05
 
-    model_drift = drift_auc or drift_f1
-    print(f"MODEL_DRIFT = {model_drift} (auc_drop>0.05 or f1_drop>0.05)")
+    model_drift = drift_auc or drift_f1 or drift_accuracy or drift_recall or drift_balanced_acc
+    print(f"MODEL_DRIFT = {model_drift} (auc_drop>0.05 or f1_drop>0.05 or accuracy_drop>0.05 or recall_drop>0.05 or balanced_acc_drop>0.05)")
 
     return model_drift
 
