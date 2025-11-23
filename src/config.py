@@ -23,3 +23,10 @@ MLFLOW_TRACKING_URI = f"file://{MLFLOW_DIR}"
 #PARA WINDOWS
 #MLFLOW_TRACKING_URI = MLFLOW_DIR.as_uri()
 MLFLOW_EXPERIMENT_NAME = "credit_risk_baseline"
+
+
+# --- Métricas y datos de producción ---
+METRICS_DIR = BASE_DIR / "metrics"
+BASELINE_METRICS_PATH = METRICS_DIR / "baseline_metrics.json"
+PRODUCTION_DATA_DIR = DATA_DIR / "production"
+PRODUCTION_DATA_PATH = PRODUCTION_DATA_DIR / "production_batch.csv"

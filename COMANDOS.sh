@@ -42,3 +42,14 @@ uvicorn api.main:app --reload
 python -m pytest -q
 
 
+
+
+### PARA EL CONTINUOS TRAINING 
+#Ejecutarán localmente:
+python -m src.data_prep
+python -m src.train
+python -m src.evaluate
+#GEnera la data de proudccioón
+python -m src.simulate_production_data
+#Esto genera métricas baseline
+
